@@ -23,21 +23,9 @@
 					    </template>
 					</ul>
 				</div>
-				<!-- <div class="result-list">
-					<mt-cell class="music-cell-type5" 
-					         v-for="(item, index) in searchResult"
-					         key="index"
-					         @click.native="playSingleMusic(item)">
-					    <i class="music-icon"></i>
-					    <div class="song-wrapper">
-					    	<p>{{ item.name }}</p>
-						    <p>{{ item.singer }}</p>
-					    </div>
-					</mt-cell>
-				</div> -->
 			</home-search>
 		</form>
-		<div class="page-content" style="padding-top:86px;">
+		<div class="page-content" style="margin-top:86px;">
 			<swiper :options="swiperOption" ref="mySwiper">
 				<swiper-slide v-for="(item, index) in bannerDate" key="index">
 					<img 
@@ -155,26 +143,12 @@
 		        		key: this.searchValue
 		        	}
 				}, response => {
+					console.log(response);
 					// API出错！
 					this.searchState = 2;
 					this.searchResult = response.data && response.data.song.itemlist || [];
 				})
-			},
-
-			// 用于搜索页面歌曲播放
-			// playSingleMusic (song = {}){
-			// 	let songObj = {
-			// 		data: {
-			// 			songid: song.id,
-			// 			songname: song.name,
-			// 			singer: [{
-			// 				name: song.singer
-			// 			}]
-			// 		}
-			// 	};
-			// 	store.dispatch(NameSpace + '/playSong', 0);
-			// 	store.commit(NameSpace + '/stackSonglist', songObj);
-			// }
+			}
 		}
 	}
 </script>

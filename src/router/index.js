@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from "views/home/index"
-import SingerList from "views/musicList/singerList"
-import TopList from "views/musicList/topList"
-import Radio from "views/musicList/radio"
-import RankList from "components/rankList"
 
 Vue.use(Router)
 
@@ -12,27 +7,28 @@ let routes = [
 	{
 		path: "/home",
 		name: "home",
-		component: Home
+		// 实现路由按需加载
+		component: resolve => require(["views/home/index"], resolve)
 	},
 	{
 		path: "/singerList",
 		name: "singerList",
-		component: SingerList
+		component: resolve => require(["views/musicList/singerList"], resolve)
 	},
 	{
 		path: "/topList",
 		name: "topList",
-		component: TopList
+		component: resolve => require(["views/musicList/topList"], resolve)
 	},
 	{
 		path: "/radio",
 		name: "radio",
-		component: Radio
+		component: resolve => require(["views/musicList/radio"], resolve)
 	},
 	{
 		path: "/rankList/:id",
 		name: "rankList",
-		component: RankList
+		component: resolve => require(["components/rankList"], resolve)
 	},
 	{
 		path: "*",
@@ -42,6 +38,6 @@ let routes = [
 
 export default new Router({
 	routes,
-	mode: "history",  // 去除地址栏的 "#/"
+	mode: "history",  // 不用hash值
 	base: "/base"
 })

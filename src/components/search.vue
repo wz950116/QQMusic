@@ -6,6 +6,7 @@
                 <input
                     type="search"
                     class="mint-searchbar-core"
+                    style="padding:0 5px"
                     ref="input"
                     v-model="currentValue"
                     :placeholder="placeholder"
@@ -21,8 +22,8 @@
         <div class="mint-search-list" v-show="visible">
             <div class="mint-search-list-warp">
                 <slot>
-                    <x-cell v-for="(item, index) in result" :key="index" :title="item" class="test">
-                    </x-cell>
+                    <!-- <x-cell v-for="(item, index) in result" :key="index" :title="item" class="test">
+                    </x-cell> -->
                 </slot>
             </div>
         </div>
@@ -36,7 +37,8 @@ export default {
     name: 'mt-search',
     data() {
         return {
-            visible: false,  // 子组件不建议修改副组建通过props传递过来的值
+            visible: false,  
+            // 子组件不建议修改父组件通过props传递过来的值
             currentValue: this.value
         }
     },
