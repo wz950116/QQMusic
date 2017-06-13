@@ -44,7 +44,8 @@
 				<!-- selected控制显示的子级 -->
 				<mt-tab-container 
 					v-model="selected" 
-					ref="scrollTouch">
+					ref="scrollTouch"
+					:class="{initHeight: !showTitle, changeHeight: showTitle}">
 					<mt-tab-container-item id="1">
 						<ul>
 							<li>
@@ -118,7 +119,8 @@
 				showTitle: false,
 				title: '',
 				selected: "1",
-				coverScale: 1
+				coverScale: 1,
+				isChangeHeight: true
 			}
 		},
 		components: {
@@ -202,6 +204,12 @@
 		display: inline-block;
 		margin-top: -10px;
 	}
+	.initHeight{
+		height: 30vh;
+	}
+	.changeHeight{
+		height:60vh;
+	}
 	.music-cover-wrap {
 		position: relative;
 		width: 100%;
@@ -270,7 +278,6 @@
 			z-index: 99;
 		}
 		.mint-tab-container{
-			height: 30vh;
 			overflow: auto;
 			padding-bottom: 56px;
 			.mint-tab-container-wrap{

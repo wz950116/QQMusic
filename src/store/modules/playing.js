@@ -1,5 +1,5 @@
 import * as types from "../mutations_type"
-const namespaced = true,
+const namespaced = true
 const state = {
 	// playing song detail msg
 	songMsg: {
@@ -33,51 +33,44 @@ const state = {
 		// 1: cycle, 2: singleCycle, 3: random,
 		playingOrder: 'cycle'
 	}
-},
-const mutations = {
-	// play or pause music
-	[type.PAUSE](state, status) {
-		let songid = state.songMsg.data.songid;
-		state.songState.playingState = status == 'pause' || songid == null ? 'pause' : 'playing' + songid;
-	},
-	[type.PRUNE_CURRENTTIME](state, time) {
-		state.songState.pruneTime = state.songState.timing * time || 0;
-	},
-	// swtich the current lyric index
-	[type.SWITCHLYRICINDEX](state, index) {
-		state.songState.currentLyricIndex = index;
-	},
-	[type.SWITCH_LYRICS_ARR](state, lyricArr) {
-		state.songState.currentLyricArr = lyricArr instanceof Array ? lyricArr : [];
-	},
-	[type.SWITCH_LYRUC_DURATION](state, duration) {
-		state.songState.currentLyricDuration = duration;
-	},
-	// stack songlist
-	[type.STACK_SONG_LIST](state, stack) {
-		state.songlist = [...(stack instanceof Array ? stack : [stack || {}])];
-		state.songState.currentIndex = 0;
-	},
-	[type.PUSH_SONG_LIST](state, stack) {
-		state.songlist = [...state.songlist, ...(stack instanceof Array ? stack : [])];
-	},
-	[type.SWITCH_PLAY_ORDER](state, order) {
-		let orderArr = ['cycle', 'singleCycle', 'random'],
-			current = orderArr.indexOf(state.songState.playingOrder),
-			next = orderArr.indexOf(order);
-		state.songState.playingOrder = next > -1 ? orderArr[next] : orderArr[current >= 2 ? 0 : current + 1];
-	}
 }
+// const mutations = {
+// 	// play or pause music
+// 	[type.PAUSE](state, status) {
+// 		let songid = state.songMsg.data.songid;
+// 		state.songState.playingState = status == 'pause' || songid == null ? 'pause' : 'playing' + songid;
+// 	},
+// 	[type.PRUNE_CURRENTTIME](state, time) {
+// 		state.songState.pruneTime = state.songState.timing * time || 0;
+// 	},
+// 	// swtich the current lyric index
+// 	[type.SWITCHLYRICINDEX](state, index) {
+// 		state.songState.currentLyricIndex = index;
+// 	},
+// 	[type.SWITCH_LYRICS_ARR](state, lyricArr) {
+// 		state.songState.currentLyricArr = lyricArr instanceof Array ? lyricArr : [];
+// 	},
+// 	[type.SWITCH_LYRUC_DURATION](state, duration) {
+// 		state.songState.currentLyricDuration = duration;
+// 	},
+// 	// stack songlist
+// 	[type.STACK_SONG_LIST](state, stack) {
+// 		state.songlist = [...(stack instanceof Array ? stack : [stack || {}])];
+// 		state.songState.currentIndex = 0;
+// 	},
+// 	[type.PUSH_SONG_LIST](state, stack) {
+// 		state.songlist = [...state.songlist, ...(stack instanceof Array ? stack : [])];
+// 	},
+// 	[type.SWITCH_PLAY_ORDER](state, order) {
+// 		let orderArr = ['cycle', 'singleCycle', 'random'],
+// 			current = orderArr.indexOf(state.songState.playingOrder),
+// 			next = orderArr.indexOf(order);
+// 		state.songState.playingOrder = next > -1 ? orderArr[next] : orderArr[current >= 2 ? 0 : current + 1];
+// 	}
+// }
 const actions = {
 	// Reset Play Progress To Some Point
-	resetProgress({
-		state,
-		commit,
-		dispatch
-	}, payload = {
-		currentTime: 0,
-		duration: 0
-	}) {
+	resetProgress({state, commit, dispatch}, payload = {currentTime: 0, duration: 0}) {
 		let current = parseInt(payload.currentTime) || 0,
 			timing = parseInt(payload.duration) || 0;
 
@@ -90,12 +83,8 @@ const actions = {
 		}
 	},
 	// 用于歌曲的播放进度调整
-	pruneProgress({
-		state,
-		dispatch
-	}, progress) {
+	pruneProgress({state, dispatch}, progress) {
 		let formatProgress;
-
 		if (progress < 0) {
 			formatProgress = 0
 		} else if (progress > 1) {
@@ -103,7 +92,6 @@ const actions = {
 		} else {
 			formatProgress = progress;
 		}
-
 		dispatch('resetProgress', {
 			currentTime: state.songState.timing * formatProgress,
 			duration: state.songState.timing
@@ -114,11 +102,7 @@ const actions = {
 	 * index == string ? next : prev
 	 * index == number go specify song
 	 * */
-	playSong({
-		state,
-		commit,
-		dispatch
-	}, index) {
+	playSong({state, commit, dispatch}, index) {
 		let nextIndex;
 		// judge if play next or play specify song
 		if (typeof index == 'string') {
@@ -156,18 +140,11 @@ const actions = {
 		dispatch('resetProgress');
 	},
 	// clear song in stack list
-	clearSong({
-		state,
-		dispatch
-	}, index) {
+	clearSong({state, dispatch}, index) {
 		state.songlist.splice(index >> 0, 1);
 	},
 	// clear all song msg
-	clearSongStack({
-		state,
-		commit,
-		dispatch
-	}) {
+	clearSongStack({state, commit, dispatch}) {
 		let defaultSongMsg = {
 			data: {},
 			getMedia: media => media ? `http://ws.stream.qqmusic.qq.com/${media}.m4a?fromtag=46` : '',
@@ -179,10 +156,9 @@ const actions = {
 		commit('pause', 'pause');
 	}
 }
-}
 export default {
 	namespaced,
 	state,
-	mutations,
+	// mutations,
 	actions
 }
