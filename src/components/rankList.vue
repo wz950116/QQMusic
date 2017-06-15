@@ -213,7 +213,8 @@
 		height: 30vh;
 	}
 	.changeHeight{
-		height:60vh;
+		height: 60vh;
+		padding-bottom: 0 !important;
 	}
 	.music-cover-wrap {
 		position: relative;
