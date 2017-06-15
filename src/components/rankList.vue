@@ -103,7 +103,7 @@
 	import AlloyTouch from 'alloytouch'
 	import Transform from 'css3transform'
 	import { lyricsAnalysis, getDayOfYear } from '../public'
-	import { mapMutations, mapActions, mapGetters } from 'vuex'
+	import { mapActions, mapGetters } from 'vuex'
 	const NameSpace = 'playing'
 
 	export default {
@@ -123,6 +123,11 @@
 			vHeader(resolve) {
 				require(['./header.vue'], resolve);
 			}
+		},
+		computed: {
+			...mapGetters({
+				show: 'list_show',
+			})
 		},
 		created() {
 			// 歌曲列表数据请求 不同参数返回不同列表
@@ -150,7 +155,13 @@
 		        }, 400);
 	        })
 		},
+		mounted() {
+			console.log(this.show)
+		},
 		methods: {
+			...mapActions([
+				'setTransition'
+			]),
 			_getDayOfYear: getDayOfYear,
 			_initScroll() {
 				let scrollTouch = this.$refs.scrollTouch.$el,
@@ -187,8 +198,8 @@
 			 * 返回一个对象
 			 * ...map* 即获取队列追加到另外一个对象中
 			 */
-			...mapMutations(NameSpace, ['switchPlayOrder', 'stackSonglist']),
-			...mapActions(NameSpace, ['playSong']),
+			// ...mapMutations(NameSpace, ['switchPlayOrder', 'stackSonglist']),
+			// ...mapActions(NameSpace, ['playSong']),
 
 			randomPlayAll() {
 				this.stackSonglist(this.songlist);

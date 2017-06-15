@@ -1,22 +1,29 @@
-import { TOGGLE_SHOW, MODIFY_CLASS } from "../mutations_type"
+import {TOGGLE_SHOW, MODIFY_CLASS} from "../mutations_type"
 const namespaced = true
 const state = {
-	// if show the list
-	show: false,
-	// modify the list style
+    show: false,
 	class: ''
 }
 const mutations = {
 	[TOGGLE_SHOW](state) {
-		// state.show = !state.show;
+		state.show = !state.show
 	},
 	[MODIFY_CLASS](state, style) {
-		// state.class = style;
+		state.class = style
+	}
+}
+const actions = {
+	toggleShow({commit}) {
+		commit(TOGGLE_SHOW)
+	},
+	modifyClass({commit}, style){
+		commit(MODIFY_CLASS, style)
 	}
 }
 
 export default {
 	namespaced,
 	state,
-	mutations
+	mutations,
+	actions
 }

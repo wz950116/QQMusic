@@ -1,7 +1,7 @@
 import { SET_TRANSITION } from "../mutations_type"
 const namespaced = true
 const state = {
-	transitionName: '',
+	transitionName: 'hello',
 	action: []
 }
 const mutations = {
@@ -9,9 +9,16 @@ const mutations = {
 		state.transitionName = transition;
 	}
 }
+const actions = {
+	setTransition({commit}, transition) {
+		console.log(transition);
+		commit(SET_TRANSITION, transition)
+	}
+}
 
 export default {
 	namespaced,
 	state,
-	mutations
+	mutations,
+	actions
 }
