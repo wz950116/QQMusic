@@ -1,16 +1,16 @@
-const show = store => store.show
-const transitionName = store => store.transitionName
-const action = store => store.action
-const songMsg_data = store => store.songMsg.data
-const songMsg_getMedia = store => store.songMsg.getMedia
-const songlist = store => store.songlist
-const songState_playingState = store => store.songState.playingState
-const songState_playingProgress = store => store.songState.playingProgress
-const songState_current = store => store.songState.current
-const songState_pruneTime = store => store.songState.pruneTime
-const songState_currentIndex = store => store.songState.currentIndex
-const songState_currentLyricIndex = store => store.songState.currentLyricIndex
-const songState_currentLyricDuration = store => store.songState.currentLyricDuration
-const songState_currentLyricArr = store => store.songState.currentLyricArr
-const songState_timing = store => store.songState.timing
-const songState_playingOrder = store => store.songState.playingOrder
+export const show = state => state.show;
+export const transitionName = state => state.transitionName;
+export const action = state => state.action;
+export const songMsg_data = state => state.songMsg.data;
+export const songMsg_getMedia = state => state.songMsg.getMedia;
+export const songlist = state => state.songlist;
+export const songState_playingState = state => state.songState.playingState;
+export const songState_playingProgress = state => state.songState.playingProgress;
+export const songState_current = state => state.songState.current;
+export const songState_pruneTime = state => state.songState.pruneTime;
+export const songState_currentIndex = state => state.songState.currentIndex;
+export const songState_currentLyricIndex = state => state.songState.currentLyricIndex;
+export const songState_currentLyricDuration = state => state.songState.currentLyricDuration;
+export const songState_currentLyricArr = state => state.songState.currentLyricArr;
+export const songState_timing = state => state.songState.timing;
+export const songState_playingOrder = state => state.songState.playingOrder;

@@ -55,7 +55,7 @@
 									</a>
 								</mt-cell>
 							</li>
-							<li 
+							<li
 								v-for="(song, index) in songlist" 
 								key="index"
 							    @click="toPlay(songlist, index, song.data.songid)">
@@ -82,7 +82,7 @@
 						</ul>
 					</mt-tab-container-item>
 					<mt-tab-container-item id="2">
-						<p  v-html="topinfo.info" class="music-info"></p>
+						<p v-html="topinfo.info" class="music-info"></p>
 					</mt-tab-container-item>
 				</mt-tab-container>
 	    	</div>
@@ -97,18 +97,15 @@
 	</div>
 </template>
 
-
-
 <script>
-	import vHeader from "./header"
 	import {apiHandler} from '@/api/index'
 	// 全屏滚动插件
 	import AlloyTouch from 'alloytouch'
 	import Transform from 'css3transform'
 	import { lyricsAnalysis, getDayOfYear } from '../public'
-	import { mapMutations, mapActions } from 'vuex'
-	import base64 from 'base-64'
-	import utf8 from 'utf8'
+	import { mapMutations, mapActions, mapGetters } from 'vuex'
+	const NameSpace = 'playing'
+
 	export default {
 		name: "rankList",
 		data() {
@@ -119,29 +116,33 @@
 				showTitle: false,
 				title: '',
 				selected: "1",
-				coverScale: 1,
-				isChangeHeight: true
+				coverScale: 1
 			}
 		},
 		components: {
-			vHeader
+			vHeader(resolve) {
+				require(['./header.vue'], resolve);
+			}
 		},
 		created() {
+			// 歌曲列表数据请求 不同参数返回不同列表
 	        apiHandler({
 	        	name: 'rankList',
 	        	params: {
 	        		topid: this.$route.params.id
 	        	}
-	        },(response) => {
+	        }, response => {
 	        	/*
 	        	 * 延迟400ms执行等待页面切换动画完成
 	        	 * 原由: 当不存在延迟时组件的内容渲染与页面的切换将会同时执行
 	        	 * 由此将会导致在Chrome下产生卡顿
+	        	 * 
 	        	 * */
 		        setTimeout(() => {
 			        this.data = response;
 		        	this.topinfo = response.topinfo;
 			        this.songlist = response.songlist;
+
 			        //DOM更新后调用全屏滚动事件
 			        this.$nextTick(() => {
 			        	this._initScroll();
@@ -151,14 +152,6 @@
 		},
 		methods: {
 			_getDayOfYear: getDayOfYear,
-			randomPlayAll() {
-				this.stackSonglist(this.songlist);
-				this.switchPlayOrder('random');
-				this.playSong('next');
-			},
-			toPlay(songlist, index, id) {
-				this.play.playMusic(songlist, index, id);
-			},
 			_initScroll() {
 				let scrollTouch = this.$refs.scrollTouch.$el,
 					scrollTarget = this.$refs.scrollTarget;
@@ -167,8 +160,8 @@
 				let self = this;
 				let alloyTouch = new AlloyTouch({
 					touch: scrollTouch,  // 可触发滚动元素
-					target: scrollTarget,  // 目标元素
-					sensitivity: .8,  // 滚动时敏感度大小
+					target: scrollTarget,  // 移动端的元素
+					sensitivity: .5,  // 滚动时敏感度大小
 					property: 'translateY',  // 平移方向
 					max: 0,  // 初始位置最大值
 					// 监听滚动事件
@@ -183,15 +176,27 @@
 						}else {
 							this.preventDefault = true;
 						}
+						// filter属性改变背景图模糊程度
+						self.$refs.musicCover.style.WebkitFilter = `blur(${pos/coverHeight*20}px)`
 					}
 				});
 			},
-			// ...mapMutations(NameSpace, ['switchPlayOrder', 'stackSonglist']),
-			// ...mapActions(NameSpace, ['playSong']),
-			_blurringCover(percentage) {
-				let blur = 30,
-					musicCover = this.$refs.musicCover;
-				musicCover.style.filter = `blur(${(percentage*blur >> 0)}px)`;
+			/**
+			 * mapState/mapGetters/mapMutations/mapActions
+			 * 是vuex提供的四个方法 接受namespace（选填） map（必填）
+			 * 返回一个对象
+			 * ...map* 即获取队列追加到另外一个对象中
+			 */
+			...mapMutations(NameSpace, ['switchPlayOrder', 'stackSonglist']),
+			...mapActions(NameSpace, ['playSong']),
+
+			randomPlayAll() {
+				this.stackSonglist(this.songlist);
+				this.switchPlayOrder('random');
+				this.playSong('next');
+			},
+			toPlay(songlist, index, id) {
+				this.play.playMusic(songlist, index, id);
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import * as store from "./modules"
 import list from "./modules/list"
 import playing from "./modules/playing"
 import transition from "./modules/transition"
