@@ -1,67 +1,66 @@
-/* ==================================================
- * 由 Transition.scss 统一管理全局Transition, Animation
- * ================================================== */
 
-// Page Turn on Transian Effect
+// 进入页动画
 .turn-on {
-  &-enter {
-    transform: translate3d(100%, 0, 0);
-  }
-  &-leave-to {
-    transform: translate3d(-20%, 0, 0);
-  }
-  &-enter-active, &-leave-active  {
-    transition: transform .4s ease;
-  }
+    &-enter {
+        transform: translate3d(100%, 0, 0);
+    }
+    &-leave-to {
+        transform: translate3d(-20%, 0, 0);
+    }
+    &-enter-active, &-leave-active  {
+        transition: transform .4s ease;
+    }
 }
 
-// Page Turn Off Transian Effect
+// 回滚页动画
 .turn-off {
-  &-enter {
-    transform: translate3d(-20%, 0, 0);
-  }
-  &-leave-to {
-    transform: translate3d(100%, 0, 0);
-  }
-  &-leave-active {
-    z-index: 2;
-  }
-  &-enter-active, &-leave-active  {
-    transition: transform .4s ease;
-  }
+    &-enter {
+        transform: translate3d(-20%, 0, 0);
+    }
+    &-leave-to {
+        transform: translate3d(100%, 0, 0);
+    }
+    &-leave-active {
+        z-index: 2;
+    }
+    &-enter-active, &-leave-active  {
+        transition: transform .4s ease;
+    }
 }
 
-// song list 
+// 播放列表动画 
 .list-view-enter-active, .list-view-leave-active {
-  transition: transform .5s ease;
+    transition: transform .5s ease;
 }
 .list-view-enter, .list-view-leave-to{
-  transform: translateY(100%);
+    transform: translateY(100%);
 }
 
-// header title switch animation
+// 顶部动画
 .title-enter-active, .title-leave-active {
-  transition-property: opacity, transform;
-  transition-duration: .5s;
+    transition-property: opacity, transform;
+    transition-duration: .5s;
 }
 .title-enter, .title-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
+    opacity: 0;
+    transform: translateY(10px);
 }
 
-// Song Ablum Infinite Rotate
+// 旋转
 .spin-slow {
-  animation: spin 6s linear infinite;
+    animation: spin 6s linear infinite;
 }
 .spin {
-  animation: spin 30s linear infinite;
+    animation: spin 30s linear infinite;
 }
-
+.spin-stop {
+    animation: spin 6s linear infinite paused;
+}
 @keyframes spin{
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

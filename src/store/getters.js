@@ -2,6 +2,8 @@ export const list_show = state => state.list.show
 export const list_class = state => state.list.class
 export const transitionName = state => state.transition.transitionName
 export const transition_action = state => state.transition.action
+// play
+export const playing_songState = state => state.transition.playingState
 // export const songMsg_data = state => state.songMsg.data;
 // export const songMsg_getMedia = state => state.songMsg.getMedia;
 // export const songlist = state => state.songlist;

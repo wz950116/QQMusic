@@ -31,6 +31,18 @@ let routes = [
 		component: resolve => require(["components/rankList"], resolve)
 	},
 	{
+		path: '/playing',
+		name: 'playing',
+		meta: {
+			noPageAnimation: true
+		},
+		beforeEnter(to, from, next) {
+			// store.state.playing.songlist.length > 0 && next();
+		},
+		component: resolve => require([
+			"components/playing"], resolve)
+	},
+	{
 		path: "*",
 		redirect: "/home"
 	}

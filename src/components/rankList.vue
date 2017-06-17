@@ -58,7 +58,7 @@
 							<li
 								v-for="(song, index) in songlist" 
 								key="index"
-							    @click="toPlay(songlist, index, song.data.songid)">
+							    @click="toPlay(song.data)">
 								<mt-cell class="music-cell-type3">
 									<div class="suffix">
 										<p :style="index<3 && {color: '#FF4500'}">
@@ -103,7 +103,7 @@
 	import AlloyTouch from 'alloytouch'
 	import Transform from 'css3transform'
 	import { lyricsAnalysis, getDayOfYear } from '../public'
-	import { mapActions, mapGetters } from 'vuex'
+	import { mapActions, mapGetters, mapMutations } from 'vuex'
 	const NameSpace = 'playing'
 
 	export default {
@@ -155,13 +155,7 @@
 		        }, 400);
 	        })
 		},
-		mounted() {
-			console.log(this.show)
-		},
 		methods: {
-			...mapActions([
-				'setTransition'
-			]),
 			_getDayOfYear: getDayOfYear,
 			_initScroll() {
 				let scrollTouch = this.$refs.scrollTouch.$el,
@@ -198,16 +192,16 @@
 			 * 返回一个对象
 			 * ...map* 即获取队列追加到另外一个对象中
 			 */
-			// ...mapMutations(NameSpace, ['switchPlayOrder', 'stackSonglist']),
-			// ...mapActions(NameSpace, ['playSong']),
+			...mapMutations(NameSpace, ['playSong', 'pause', 'switchPlayOrder', 'stackSonglist']),
 
 			randomPlayAll() {
-				this.stackSonglist(this.songlist);
-				this.switchPlayOrder('random');
-				this.playSong('next');
+				this.stackSonglist(this.songlist)
+				this.switchPlayOrder('random')
+				this.playSong('next')
 			},
-			toPlay(songlist, index, id) {
-				this.play.playMusic(songlist, index, id);
+			toPlay(data) {
+				this.playSong(data)
+				this.pause("play"+data.songid)
 			}
 		}
 	}
