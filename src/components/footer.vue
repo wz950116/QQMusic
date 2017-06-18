@@ -5,7 +5,7 @@
 				tag="div"
 				class="song-cover"
 				:to="{name: 'playing'}">
-				<img :src="ablumImgUrl" :class="['song-album-img', 'name-desc', playingState != 'pause' ? 'spin-slow' : 'spin-stop']">
+				<img :src="ablumImgUrl" :class="['song-album-img', playingState != 'pause' ? 'spin-slow' : 'spin-stop']">
 				<div class="name-desc">
 					<p>{{ songMsg.data.songname }}</p>
 					<p>{{ currentLyric || (songMsg.data.singer && songMsg.data.singer[0].name) }}</p>
@@ -51,12 +51,11 @@
 		data() {
 			return {
 				lyricsObj: {
-					timeArr: [],
 					lyricsArr: [],
+					timeArr: [],
 					durationArr: []
 				},
 				currentLyric: "",
-
 			}
 		},
 		computed: {
@@ -72,6 +71,10 @@
 			},
 			playingProgress() {
 				return this.songState.playingProgress
+			},
+
+			currentTime() {
+				return this.songState.currentLyricCurrentTime
 			}
 		},
 		watch: {
@@ -90,7 +93,7 @@
 				})
 			},
 			playingState(state) {
-				// 用状态+对应歌曲id 判断是否播放
+				// 用状态+对应歌曲id来监听变化 判断是否播放
 				let audio = this.$refs.audio
 				if(state == "pause") {
 					audio.pause()
@@ -104,16 +107,28 @@
 						})
 					});
 				}
+			},
+			currentTime(time) {
+				let timeArr = this.lyricsObj.timeArr,
+					lyricsArr = this.lyricsObj.lyricsArr,
+					durationArr = this.lyricsObj.durationArr;
+				timeArr.forEach((item, index) => {
+					// 当前播放时间匹配歌词对应时间
+					if(parseInt(time) == item) {
+						this.currentLyric = lyricsArr[index]
+						this.switchLyricsIndex(index)
+						this.switchLyricsDuration(durationArr[index])
+					}
+				})
 			}
 		},
 		methods: {
-			...mapMutations(NameSpace, ["switchLyricsArr", "pause"]),
-			// 隐藏vuex中list模块对应的视图显示影藏
+			...mapMutations(NameSpace, ["pause", "switchLyricsArr", "switchLyricsIndex", "switchLyricsCurrentTime", "switchLyricsDuration"]),
+			// 隐藏vuex中list模块对应的视图显示隐藏
 			...mapMutations("list", ["toggleShow"]),
 			...mapActions(NameSpace, ["playSong", "progressStart"]),
 			_playProgress(e) {
 				let audio = e.target,
-					// 这边的currentTime duration的获取最好也放到vuex中通过computed获取来的准确有效
 					currentTime = audio.currentTime,
 					duration = audio.duration,
 					progressObj = {currentTime, duration};
@@ -123,7 +138,7 @@
 	}
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 	.fixed-wrapper {
 		position: fixed;
 		bottom: 0;
@@ -131,69 +146,71 @@
 		right: 0;
 		z-index: 3;
 		overflow: hidden;
-		.song-cover {
-			display: flex;
-			flex: 1;
-			align-items: center;
-			height: 56px;
-			overflow: hidden;
-			.name-desc {
+		.mint-cell-value{
+			width:100% !important;
+			overflow: hidden !important;
+			.song-cover {
+				display: flex;
+				flex: 1 1 auto;
+				align-items: center;
+				height: 56px;
 				overflow: hidden;
-				font-size: 14px;
-				p {
-					@include font-ellipsis;
-				}
-				p:first-child {
+				.name-desc {
+					flex:1 1 auto;
+					overflow: hidden;
 					font-size: 14px;
-					color: $black-base-font;
+					margin-left: 10px;
+					p {
+						@include font-ellipsis;
+					}
+					p:first-child {
+						font-size: 14px;
+						color: $black-base-font;
+					}
+					p:last-child {
+						margin-top: 5px;
+						color: $gray-light-font;
+					}
 				}
-				p:last-child {
-					margin-top: 5px;
-					color: $gray-light-font;
-				}
-			}
-			.song-album-img {
-				display: block;
-				max-width: 100%;
-				width: 45px;
-				height: 45px;
-				border-radius: 50%;
-			}
-		}
-		.mint-cell-value {
-			overflow: hidden;
-		}
-		.play-wrapper {
-			display: flex;
-			align-items: center;
-			.circle-wrapper {
-				position: relative;
-			    width: 28px;
-			    height: 28px;
-			    border: 2px solid $primary-color;
-			    border-radius: 50%;
-				.progress-circle {
-				    transform: rotate(-90deg);
-				}
-				.progress-circle-prog {
-				    fill: none;
-				    stroke: $primary-color;
-				    stroke-width: 2px;
-				    stroke-dasharray: 0, 70;
-				    transition: stroke-dasharray 0.7s linear 0s;
-				} 
-				.play-icon {
-					position: absolute;
-					left: 50%;
-					top: 50%;
-					transform: translate(-50%, -50%);
-					width: 16px;
+				.song-album-img {
+					display: block;
+					width: 45px;
+					height: 45px;
+					border-radius: 50%;
 				}
 			}
-			.list-icon {
-				margin-left: 16px;
-				width: 24px;
-				height: 24px;	
+			.play-wrapper {
+				display: flex;
+				align-items: center;
+				.circle-wrapper {
+					position: relative;
+				    width: 28px;
+				    height: 28px;
+				    border: 2px solid $primary-color;
+				    border-radius: 50%;
+					.progress-circle {
+					    transform: rotate(-90deg);
+					}
+					.progress-circle-prog {
+					    fill: none;
+					    stroke: $primary-color;
+					    stroke-width: 2px;
+					    stroke-dasharray: 0, 70;
+					    transition: stroke-dasharray 0.7s linear 0s;
+					} 
+					.play-icon {
+						position: absolute;
+						left: 50%;
+						top: 50%;
+						transform: translate(-50%, -50%);
+						width: 16px;
+					}
+				}
+				.list-icon {
+					margin-left: 16px;
+					width: 24px;
+					height: 24px;	
+				}
 			}
 		}
 	}

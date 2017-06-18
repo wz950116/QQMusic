@@ -1,6 +1,5 @@
-/* ===============================================
- *                公 用 资 源 函 数
- * =============================================== */
+//===================公共方法===================//
+
 export function copyArray(source, array) {
     let index = -1
     const length = source.length
@@ -110,25 +109,25 @@ export function getCurrentIndex(list = [], songid) {
     }));
 }
 
+// 阻止默认事件*
 export function preventDefault(e) {
     e && e.preventDefault();
 }
 
-// 将歌词信息信息分解成 出现时间、歌词数组、持续时间、三个数组
+// 将歌词信息信息分解成 出现时间、歌词数组、持续时间三个数组*
 export function lyricsAnalysis(lyrics) {
     let lyricsObj = {
         timeArr: [],
         lyricsArr: [],
         durationArr: []
     };
+    // 分割成数组 做遍历
     let tempArr = lyrics.split('\n');
-
     tempArr.forEach(item => {
         let splitPoint = item.indexOf(']');
         lyricsObj.timeArr.push(timeConvert(item.slice(1, splitPoint)));
         lyricsObj.lyricsArr.push(item.slice(splitPoint + 1));
     });
-    // count each lyric duration if it's last the default time is 10
     lyricsObj.timeArr.forEach((time, index) => {
         let timeArr = lyricsObj.timeArr;
         lyricsObj.durationArr.push(index == timeArr.length - 1 ? 10 : timeArr[index + 1] - time);
@@ -136,13 +135,12 @@ export function lyricsAnalysis(lyrics) {
     return filterLyrics(lyricsObj);
 }
 
-// 过滤掉歌词数组中 空白等待、换行的部分
+// 过滤掉歌词数组中 空白等待、换行的部分*
 export function filterLyrics(lyricsObj) {
     let timeArr = lyricsObj.timeArr || [],
         lyricsArr = lyricsObj.lyricsArr || [],
-        durationArr = lyricsObj.durationArr || [];
-    let filterArr = [];
-
+        durationArr = lyricsObj.durationArr || [],
+        filterArr = [];
     lyricsArr = lyricsArr.filter((item, index) => {
         if (item.trim()) {
             filterArr.push(index);
@@ -151,7 +149,6 @@ export function filterLyrics(lyricsObj) {
     });
     timeArr = timeArr.filter((item, timeIndex) => filterArr.find(val => timeIndex == val));
     durationArr = durationArr.filter((item, durationIndex) => filterArr.find(val => durationIndex == val));
-
     return {
         lyricsArr,
         timeArr,
@@ -175,6 +172,5 @@ export function floatNumber(num, sliceDecimal) {
     let numArr = String(num).split('.'),
         integer = numArr[0],
         decimal = numArr[1] || '';
-
     return parseFloat(integer + '.' + decimal.slice(0, sliceDecimal >> 0));
 }

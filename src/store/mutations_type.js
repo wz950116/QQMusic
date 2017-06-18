@@ -11,9 +11,15 @@ export const SWITCH_PLAY_ORDER = "switchPlayOrder"
 
 // playing
 export const PLAY_SONG = "playSong"
-export const SWITCH_LYRICS_ARR = "switchLyricsArr"
 export const PAUSE = "pause"
 export const MODIFY_PROGRESS = "modifyProgress"
+export const SWITCH_DURATION = "switchDuration"
+export const SWITCH_LYRICS_ARR = "switchLyricsArr"
+export const SWITCH_LYRICS_INDEX = "switchLyricsIndex"
+export const SWITCH_LYRICS_CURRENTTIME = "switchLyricsCurrentTime"
+export const SWITCH_LYRICS_DURATION = "switchLyricsDuration"
+export const SONG_LIST = "songList"
+export const SONG_INDEX = "songIndex"
 
 // list
 export const TOGGLE_SHOW = "toggleShow"

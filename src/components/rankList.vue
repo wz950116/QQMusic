@@ -58,7 +58,7 @@
 							<li
 								v-for="(song, index) in songlist" 
 								key="index"
-							    @click="toPlay(song.data)">
+							    @click="toPlay(song.data, songlist, index)">
 								<mt-cell class="music-cell-type3">
 									<div class="suffix">
 										<p :style="index<3 && {color: '#FF4500'}">
@@ -192,16 +192,21 @@
 			 * 返回一个对象
 			 * ...map* 即获取队列追加到另外一个对象中
 			 */
-			...mapMutations(NameSpace, ['playSong', 'pause', 'switchPlayOrder', 'stackSonglist']),
+			...mapMutations(NameSpace, ["playSong", "pause", "songList", "songIndex", 'switchPlayOrder', 'stackSonglist']),
 
 			randomPlayAll() {
-				this.stackSonglist(this.songlist)
-				this.switchPlayOrder('random')
-				this.playSong('next')
+				// this.stackSonglist(this.songlist)
+				// this.switchPlayOrder('random')
+				// this.playSong('next')
 			},
-			toPlay(data) {
+			toPlay(data, dataList, index) {
+				// 歌曲信息
 				this.playSong(data)
 				this.pause("play"+data.songid)
+				// 歌曲列表
+				this.songList(dataList)
+				// 歌曲索引值
+				this.songIndex(index)
 			}
 		}
 	}

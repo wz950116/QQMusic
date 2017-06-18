@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from "@/store"
 
 Vue.use(Router)
 
@@ -36,11 +37,12 @@ let routes = [
 		meta: {
 			noPageAnimation: true
 		},
+		// 跳转前判断是否存在播放列表
 		beforeEnter(to, from, next) {
-			// store.state.playing.songlist.length > 0 && next();
+			console.log(store.state.playing.songList.length)
+			store.state.playing.songList.length > 0 && next()
 		},
-		component: resolve => require([
-			"components/playing"], resolve)
+		component: resolve => require(["views/musicList/playing"], resolve)
 	},
 	{
 		path: "*",
