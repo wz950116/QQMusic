@@ -1,4 +1,4 @@
-import {PLAY_SONG, PAUSE, MODIFY_PROGRESS, SWITCH_DURATION, SWITCH_LYRICS_ARR, SWITCH_LYRICS_INDEX, SWITCH_LYRICS_CURRENTTIME, SWITCH_LYRICS_DURATION, SONG_LIST, SONG_INDEX} from "../mutations_type.js";
+import {SONG_MSG, PLAY_SONG, PAUSE, MODIFY_PROGRESS, SWITCH_DURATION, SWITCH_LYRICS_ARR, SWITCH_LYRICS_INDEX, SWITCH_LYRICS_CURRENTTIME, SWITCH_LYRICS_DURATION, SONG_LIST, SONG_INDEX} from "../mutations_type.js";
 
 const namespaced = true
 
@@ -6,11 +6,11 @@ const state = {
 	// 歌曲信息
 	songMsg: {
 		data: {
-			songid: "",     // 歌曲ID
-			songname: "",   // 歌曲名
-			singer: "",     // 歌手
-			albumname: "",  // 专辑名
-			albummid: ""    // 专辑ID
+			// songid: ""     // 歌曲ID
+			// songname: "",   // 歌曲名
+			// singer: "",     // 歌手
+			// albumname: "",  // 专辑名
+			// albummid: ""    // 专辑ID
 		},
 		// 专辑icon的baseURL
 		songblum_prfix: 'http://imgcache.qq.com/music/photo_new/T002R150x150M000',
@@ -43,37 +43,13 @@ const state = {
 }
 
 const mutations = {
+	[SONG_MSG](state, msgObj){
+		state.songMsg.data = msgObj
+	},
 	// 歌曲ID
-	[PLAY_SONG](state, data) {
-		let newIndex,
-			songIndex = state.songState.songIndex,
-			length = state.songList;
-		if(typeof data == "string") {
-			switch (data) {
-				case "next":
-					newIndex = songIndex >= length-1 ? 0 : ++songIndex;
-					break;
-				case "prev":
-					newIndex = songIndex <= 0 ? songIndex[length-1] : --songIndex;
-					break;
-				default:
-					break;
-			}
-		}else {
-			state.songMsg.data.songid = data.songid || ""
-			state.songMsg.data.songname = data.songname  || ""
-			state.songMsg.data.singer = data.singer  || []
-			state.songMsg.data.albumname = data.albumname || ""
-			state.songMsg.data.albummid = data.albummid || ""
-		}
-		console.log(data);
-		let songMsg =  state.songList[newIndex];
-		state.songState.currentIndex = newIndex;
-		state.songMsg = {...state.songMsg, ...songMsg};  // 合并当前歌曲信息
-		console.log(songMsg)
-		console.log(state.songState.currentIndex)
-		console.log(state.songMsg)
-		// dispatch('progressStart');
+	[PLAY_SONG](state, index) { 
+		let songMsg =  state.songList[index]
+		state.songMsg = {...state.songMsg, ...songMsg}
 	},
 	// 暂停 播放
 	[PAUSE](state, musicState) {
@@ -109,7 +85,7 @@ const mutations = {
 		state.songList = arr
 	},
 	[SONG_INDEX](state, index){
-		state.songIndex = index
+		state.songState.songIndex = index
 	},
 	// 播放顺序？
 	// [SWITCH_PLAY_ORDER](state, order){
@@ -122,18 +98,41 @@ const mutations = {
 
 const actions = {
 	// 修改进度
-	progressStart({commit}, progressObj = {currentTime: 0, duration: 0}) {
-		let current = progressObj.currentTime || 0,
-			timing = progressObj.duration || 0,
+	progressStart({commit, dispatch}, progressObj = {currentTime: 0, duration: 0}) {
+		let current = progressObj.currentTime,
+			timing = progressObj.duration,
 			newProgress = current/timing;
 		if(current/timing >= 1){
 			newProgress = 0
 			commit(PAUSE, "pause")
 			commit(SWITCH_LYRICS_CURRENTTIME, 0)
+			dispatch("playSong", "next")
 		}
 		commit(MODIFY_PROGRESS, newProgress)
 		commit(SWITCH_LYRICS_CURRENTTIME, current)
 		commit(SWITCH_DURATION, timing)
+	},
+	playSong({commit}, param) {
+		console.log(param)
+		let newIndex,
+			songIndex = state.songState.songIndex,
+			length = state.songList.length;
+		if(typeof param == "string") {
+			switch (param) {
+				case "next":
+					newIndex = songIndex >= length-1 ? 0 : ++songIndex;
+					break;
+				case "prev":
+					newIndex = songIndex <= 0 ? length-1 : --songIndex;
+					break;
+				default:
+					break;
+			}
+			commit(SONG_INDEX, newIndex);
+			commit(PLAY_SONG, newIndex);
+		} else {
+			commit(SONG_MSG, param);
+		}
 	}
 }
 

@@ -192,7 +192,8 @@
 			 * 返回一个对象
 			 * ...map* 即获取队列追加到另外一个对象中
 			 */
-			...mapMutations(NameSpace, ["playSong", "pause", "songList", "songIndex", 'switchPlayOrder', 'stackSonglist']),
+			...mapMutations(NameSpace, ["pause", "songList", "songIndex", 'switchPlayOrder', 'stackSonglist']),
+			...mapActions(NameSpace, ["playSong"]),
 
 			randomPlayAll() {
 				// this.stackSonglist(this.songlist)
@@ -200,9 +201,10 @@
 				// this.playSong('next')
 			},
 			toPlay(data, dataList, index) {
+				// 控制开关
+				this.pause("play"+data.songid)
 				// 歌曲信息
 				this.playSong(data)
-				this.pause("play"+data.songid)
 				// 歌曲列表
 				this.songList(dataList)
 				// 歌曲索引值

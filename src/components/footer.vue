@@ -25,7 +25,7 @@
 	                	</circle>
 					</svg>
 					<img 
-			            :src="require(`@/assets/${this.songState.playingState == 'pause' ? 'play-small':'pause'}.png`)"
+			            :src="require(`@/assets/${this.songState.playingState == 'pause' ? 'play-small' : 'pause'}.png`)"
 			            @click="pause(playingState == 'pause' ? '' : 'pause')"
 						class="play-icon">
 				</div>
@@ -61,18 +61,17 @@
 		computed: {
 			...mapState(NameSpace, ["songMsg", "songState"]),
 			playingSongid() {
-				return this.songMsg.data.songid
-			},
-			ablumImgUrl() {
-				return this.songMsg.data.albummid ? (this.songMsg.songblum_prfix + this.songMsg.data.albummid + '.jpg?max_age=2592000') : 'https://y.gtimg.cn/mediastyle/mobile/app/share/img/music_logo.png?max_age=2592000&v=30cd379f7b9491439f2e8dcd6e1508b6'
+				return this.songMsg.data.songid && this.songMsg.data.songid
 			},
 			playingState() {
 				return this.songState.playingState
 			},
+			ablumImgUrl() {
+				return this.songMsg.data.albummid ? (this.songMsg.songblum_prfix + this.songMsg.data.albummid + '.jpg?max_age=2592000') : 'https://y.gtimg.cn/mediastyle/mobile/app/share/img/music_logo.png?max_age=2592000&v=30cd379f7b9491439f2e8dcd6e1508b6'
+			},
 			playingProgress() {
 				return this.songState.playingProgress
 			},
-
 			currentTime() {
 				return this.songState.currentLyricCurrentTime
 			}
@@ -101,8 +100,7 @@
 					// DOM更新后播放
 					this.$nextTick(() => {
 						audio.play().catch(e => {
-							//若播放失败则提示并暂停
-							alert("音乐加载失败")
+							//若播放失败则暂停
 							this.pause("pause")
 						})
 					});

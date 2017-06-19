@@ -10,6 +10,7 @@ export const PUSH_SONG_LIST = "pushSonglist"
 export const SWITCH_PLAY_ORDER = "switchPlayOrder"
 
 // playing
+export const SONG_MSG = "songMsg"
 export const PLAY_SONG = "playSong"
 export const PAUSE = "pause"
 export const MODIFY_PROGRESS = "modifyProgress"

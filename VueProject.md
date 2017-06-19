@@ -95,3 +95,5 @@
 * 可以通过mapState获取状态，也可以定义getter获取
 * 如何让歌曲自动切换到下一首？index++  监听？
 * 修改element-ui某些样式不能给style标签加scoped
+* 浏览器不能自动打开
+* 一切状态改变必须有mutations去做

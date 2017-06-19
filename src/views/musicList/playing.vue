@@ -33,7 +33,7 @@
 					</transition>
 					<img 
 						:src="ablumImgUrl"
-						:class="['ablum', {'spin': playingState != 'pause'}]">
+						:class="['ablum', {'spin': this.songState.playingState != 'pause'}]">
 					<p class="lyric">
 						{{currentLyric}}
 					</p>
@@ -61,7 +61,7 @@
 							class="order-icon"/>
 						<img 
 							src="../../assets/back.png" 
-							@click="playSong("prev")"
+							@click='playSong("prev")'
 							class="back-icon" />
 						<img 
 							:src="require(`@/assets/${this.songState.playingState == 'pause' ? 'play-2':'pause-2'}.png`)"
