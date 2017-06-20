@@ -192,13 +192,12 @@
 			 * 返回一个对象
 			 * ...map* 即获取队列追加到另外一个对象中
 			 */
-			...mapMutations(NameSpace, ["pause", "songList", "songIndex", 'switchPlayOrder', 'stackSonglist']),
+			...mapMutations(NameSpace, ["pause", "songList", "songIndex", "switchPlayOrder"]),
 			...mapActions(NameSpace, ["playSong"]),
-
+			// 随机播放
 			randomPlayAll() {
-				// this.stackSonglist(this.songlist)
-				// this.switchPlayOrder('random')
-				// this.playSong('next')
+				this.songList(this.songlist)
+				this.switchPlayOrder("random")
 			},
 			toPlay(data, dataList, index) {
 				// 控制开关

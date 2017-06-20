@@ -7,7 +7,6 @@ export const SWITCHLYRICINDEX = "switchLyricIndex"
 export const SWITCH_LYRUC_DURATION = "switchLyricDuration"
 export const STACK_SONG_LIST = "stackSonglist"
 export const PUSH_SONG_LIST = "pushSonglist"
-export const SWITCH_PLAY_ORDER = "switchPlayOrder"
 
 // playing
 export const SONG_MSG = "songMsg"
@@ -21,6 +20,7 @@ export const SWITCH_LYRICS_CURRENTTIME = "switchLyricsCurrentTime"
 export const SWITCH_LYRICS_DURATION = "switchLyricsDuration"
 export const SONG_LIST = "songList"
 export const SONG_INDEX = "songIndex"
+export const SWITCH_PLAY_ORDER = "switchPlayOrder"
 
 // list
 export const TOGGLE_SHOW = "toggleShow"

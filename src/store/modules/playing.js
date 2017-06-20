@@ -1,4 +1,4 @@
-import {SONG_MSG, PLAY_SONG, PAUSE, MODIFY_PROGRESS, SWITCH_DURATION, SWITCH_LYRICS_ARR, SWITCH_LYRICS_INDEX, SWITCH_LYRICS_CURRENTTIME, SWITCH_LYRICS_DURATION, SONG_LIST, SONG_INDEX} from "../mutations_type.js";
+import {SONG_MSG, PLAY_SONG, PAUSE, MODIFY_PROGRESS, SWITCH_DURATION, SWITCH_LYRICS_ARR, SWITCH_LYRICS_INDEX, SWITCH_LYRICS_CURRENTTIME, SWITCH_LYRICS_DURATION, SONG_LIST, SONG_INDEX, SWITCH_PLAY_ORDER} from "../mutations_type.js";
 
 const namespaced = true
 
@@ -25,7 +25,7 @@ const state = {
 		playingProgress: 0,
 		// 当前歌词总时长
 		currentDuration: 0,
-		// 当前播放列表
+		// 当前歌词列表
 		currentLyricArr: [],
 		// 当前歌词索引值
 		currentLyricIndex: "",
@@ -47,9 +47,8 @@ const mutations = {
 		state.songMsg.data = msgObj
 	},
 	// 歌曲ID
-	[PLAY_SONG](state, index) { 
-		let songMsg =  state.songList[index]
-		state.songMsg = {...state.songMsg, ...songMsg}
+	[PLAY_SONG](state, msgObj) {
+		state.songMsg = {...state.songMsg, ...msgObj}
 	},
 	// 暂停 播放
 	[PAUSE](state, musicState) {
@@ -84,54 +83,93 @@ const mutations = {
 	[SONG_LIST](state, arr){
 		state.songList = arr
 	},
+	// 当前歌曲索引值
 	[SONG_INDEX](state, index){
 		state.songState.songIndex = index
 	},
-	// 播放顺序？
-	// [SWITCH_PLAY_ORDER](state, order){
-	// 	let orderArr = ["cycle", "singleCycle", "random"],
-	// 		current = orderArr.indexOf(state.songState.playingOrder),
-	// 		next = orderArr.indexOf(order);
-	// 	state.songState.playingOrder = next > 0 ? orderArr[next] : orderArr[current >= 2 ? 0 : current + 1]
-	// }
+	// 播放顺序
+	[SWITCH_PLAY_ORDER](state, order){
+		state.songState.playingOrder = order
+	}
 }
 
 const actions = {
-	// 修改进度
+	// 进度
 	progressStart({commit, dispatch}, progressObj = {currentTime: 0, duration: 0}) {
 		let current = progressObj.currentTime,
 			timing = progressObj.duration,
 			newProgress = current/timing;
 		if(current/timing >= 1){
 			newProgress = 0
-			commit(PAUSE, "pause")
-			commit(SWITCH_LYRICS_CURRENTTIME, 0)
-			dispatch("playSong", "next")
+			let order = state.songState.playingOrder
+			switch (order) {
+				case "cycle":
+					commit(SWITCH_LYRICS_CURRENTTIME, 0)
+					dispatch("playSong", "next")
+					break
+				case "singleCycle":
+					let index = state.songState.songIndex
+					break
+				case "random":
+					let length = state.songList.length,
+						num = parseInt(Math.random()*length),
+						songMsg =  state.songList[num];
+					commit(PLAY_SONG, songMsg)
+					commit(SONG_INDEX, num)
+					break
+				default:
+					commit(PAUSE, "pause")
+					break
+			}
+			
 		}
 		commit(MODIFY_PROGRESS, newProgress)
 		commit(SWITCH_LYRICS_CURRENTTIME, current)
 		commit(SWITCH_DURATION, timing)
 	},
 	playSong({commit}, param) {
-		console.log(param)
 		let newIndex,
 			songIndex = state.songState.songIndex,
 			length = state.songList.length;
 		if(typeof param == "string") {
 			switch (param) {
 				case "next":
-					newIndex = songIndex >= length-1 ? 0 : ++songIndex;
-					break;
+					newIndex = songIndex >= length-1 ? 0 : ++songIndex
+					break
 				case "prev":
-					newIndex = songIndex <= 0 ? length-1 : --songIndex;
-					break;
+					newIndex = songIndex <= 0 ? length-1 : --songIndex
+					break
 				default:
-					break;
+					break
 			}
-			commit(SONG_INDEX, newIndex);
-			commit(PLAY_SONG, newIndex);
+			let songMsg =  state.songList[newIndex]
+			// 更改歌词信息
+			commit(PLAY_SONG, songMsg)
+			// 更改当前歌曲索引
+			commit(SONG_INDEX, newIndex)
 		} else {
-			commit(SONG_MSG, param);
+			commit(SONG_MSG, param)
+		}
+	},
+	// 修改播放顺序
+	switchPlayOrder({commit}, order) {
+		console.log(order);
+		let newOrderIndex = ["cycle", "singleCycle", "random"].indexOf(state.songState.playingOrder)
+		switch (order) {
+			case "cycle":
+				commit(SWITCH_PLAY_ORDER, "cycle")
+				break
+			case "singleCycle":
+				commit(SWITCH_PLAY_ORDER, "singleCycle")
+				break
+			case "random":
+				commit(SWITCH_PLAY_ORDER, "random")
+				break
+			default:
+				newOrderIndex++
+				let newOrder = newOrderIndex > 2 ? "cycle" : ["cycle", "singleCycle", "random"][newOrderIndex]
+				commit(SWITCH_PLAY_ORDER, newOrder)
+				break
 		}
 	}
 }

@@ -56,7 +56,7 @@
 					</div>
 					<div class="play-control">
 						<img 
-							:src="require(`@/assets/${playOrder}.png`)" 
+							:src="require(`@/assets/${this.songState.playingOrder}.png`)"
 							@click="switchPlayOrder"
 							class="order-icon"/>
 						<img 
@@ -109,19 +109,25 @@
 			},
 			// 歌词当前句
 			currentLyric() {
-				return this.songState.currentLyricArr[this.songState.currentLyricIndex];
+				return this.songState.currentLyricArr[this.songState.currentLyricIndex]
 			},
 			playingPrgress() {
-				return this.songState.playingProgress;
+				return this.songState.playingProgress
 			},
 			playOrder() {
-				return this.songState.playingOrder;
-			},
+				// return `../../assets/${this.songState.playingOrder}.png`
+				return this.songState.playingOrder
+			}
+		},
+		watch: {
+			playOrder(val) {
+				console.log(val)
+			}
 		},
 		methods: {
-			...mapMutations(NameSpace, ["pause", "switchPlayOrder", ]),
+			...mapMutations(NameSpace, ["pause"]),
 			...mapMutations("list", ["toggleShow"]),
-			...mapActions(NameSpace, ["playSong"]),
+			...mapActions(NameSpace, ["playSong", "switchPlayOrder"]),
 
 			_bounceDown(el) {
 				Velocity(el, {translateY: -800}, {duration: 0})
