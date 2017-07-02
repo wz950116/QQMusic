@@ -108,7 +108,7 @@
 
 	export default {
 		name: "rankList",
-		data() {
+		data () {
 			return {
 				data: {},
 				topinfo: {},
@@ -129,7 +129,7 @@
 				show: 'list_show',
 			})
 		},
-		created() {
+		created () {
 			// 歌曲列表数据请求 不同参数返回不同列表
 	        apiHandler({
 	        	name: 'rankList',
@@ -157,7 +157,7 @@
 		},
 		methods: {
 			_getDayOfYear: getDayOfYear,
-			_initScroll() {
+			_initScroll () {
 				let scrollTouch = this.$refs.scrollTouch.$el,
 					scrollTarget = this.$refs.scrollTarget;
 				Transform(scrollTarget, true);
@@ -170,7 +170,7 @@
 					property: 'translateY',  // 平移方向
 					max: 0,  // 初始位置最大值
 					// 监听滚动事件
-					change(pos) {
+					change (pos) {
 						let coverHeight = -scrollTouch.clientWidth*.6;
 						// 滑动距离达到60 显示头部滚动条
 						self.showTitle = pos <= -60 ? true : false;
@@ -192,14 +192,14 @@
 			 * 返回一个对象
 			 * ...map* 即获取队列追加到另外一个对象中
 			 */
-			...mapMutations(NameSpace, ["pause", "songList", "songIndex", "switchPlayOrder"]),
-			...mapActions(NameSpace, ["playSong"]),
+			...mapMutations (NameSpace, ["pause", "songList", "songIndex", "switchPlayOrder"]),
+			...mapActions (NameSpace, ["playSong"]),
 			// 随机播放
-			randomPlayAll() {
+			randomPlayAll () {
 				this.songList(this.songlist)
 				this.switchPlayOrder("random")
 			},
-			toPlay(data, dataList, index) {
+			toPlay (data, dataList, index) {
 				// 控制开关
 				this.pause("play"+data.songid)
 				// 歌曲信息

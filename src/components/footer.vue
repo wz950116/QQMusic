@@ -60,48 +60,49 @@
 		},
 		computed: {
 			...mapState(NameSpace, ["songMsg", "songState"]),
-			playingSongid() {
-				return this.songMsg.data.songid && this.songMsg.data.songid
+			playingSongid () {
+				return this.songMsg.data.songid && this.songMsg.data.songid;
 			},
-			playingState() {
-				return this.songState.playingState
+			playingState () {
+				return this.songState.playingState;
 			},
-			ablumImgUrl() {
+			ablumImgUrl () {
 				return this.songMsg.data.albummid ? (this.songMsg.songblum_prfix + this.songMsg.data.albummid + '.jpg?max_age=2592000') : 'https://y.gtimg.cn/mediastyle/mobile/app/share/img/music_logo.png?max_age=2592000&v=30cd379f7b9491439f2e8dcd6e1508b6'
 			},
-			playingProgress() {
-				return this.songState.playingProgress
+			playingProgress () {
+				return this.songState.playingProgress;
 			},
-			currentTime() {
-				return this.songState.currentLyricCurrentTime
+			currentTime () {
+				return this.songState.currentLyricCurrentTime;
 			}
 		},
 		watch: {
-			// 当vuex中歌曲id发生改变重新发送请求
+			// 当vuex中歌曲id发生改变重新发送请求获取歌词
 			playingSongid(value) {
 				jsonp({
 					url: `https://api.darlin.me/music/lyric/${value}/?callback=jsonp1`,
 					jsonpCallback: 'jsonp1'
 				}, reponse => {
 					// 歌词格式转换
-					let lyrics = utf8.decode(base64.decode(reponse.lyric))
+					let lyrics = utf8.decode(base64.decode(reponse.lyric));
 					// 歌词信息分解
-					this.lyricsObj = lyricsAnalysis(lyrics)
+					this.lyricsObj = lyricsAnalysis(lyrics);
 					// 纯歌词保存至vuex
-					this.switchLyricsArr(this.lyricsObj.lyricsArr)
+					this.switchLyricsArr(this.lyricsObj.lyricsArr);
 				})
 			},
 			playingState(state) {
 				// 用状态+对应歌曲id来监听变化 判断是否播放
-				let audio = this.$refs.audio
+				let audio = this.$refs.audio;
 				if(state == "pause") {
-					audio.pause()
+					audio.pause();
 				} else {
-					// DOM更新后播放
+					// DOM更新完毕后播放
 					this.$nextTick(() => {
 						audio.play().catch(e => {
-							//若播放失败则暂停
-							this.pause("pause")
+							// 若播放失败则暂停
+							this.pause("pause");
+							alert("网络故障...");
 						})
 					});
 				}
@@ -113,9 +114,9 @@
 				timeArr.forEach((item, index) => {
 					// 当前播放时间匹配歌词对应时间
 					if(parseInt(time) == item) {
-						this.currentLyric = lyricsArr[index]
-						this.switchLyricsIndex(index)
-						this.switchLyricsDuration(durationArr[index])
+						this.currentLyric = lyricsArr[index];
+						this.switchLyricsIndex(index);
+						this.switchLyricsDuration(durationArr[index]);
 					}
 				})
 			}
@@ -125,12 +126,12 @@
 			// 隐藏vuex中list模块对应的视图显示隐藏
 			...mapMutations("list", ["toggleShow"]),
 			...mapActions(NameSpace, ["playSong", "progressStart"]),
-			_playProgress(e) {
-				let audio = e.target,
+			_playProgress () {
+				let audio = this.$refs.audio,
 					currentTime = audio.currentTime,
 					duration = audio.duration,
 					progressObj = {currentTime, duration};
-				this.progressStart(progressObj)
+				this.progressStart(progressObj);
 			}
 		}
 	}

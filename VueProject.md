@@ -97,3 +97,5 @@
 * 修改element-ui某些样式不能给style标签加scoped
 * 浏览器不能自动打开
 * 一切状态改变必须有mutations去做
+* vuex定义了modules，获取对应的actions方法用：this.$store.dispatch("modulesName/functionName", value)
+* @timeupdate事件在切换歌曲会失效？！

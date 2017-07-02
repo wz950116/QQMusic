@@ -39,7 +39,6 @@ let routes = [
 		},
 		// 跳转前判断是否存在播放列表
 		beforeEnter(to, from, next) {
-			console.log(store.state.playing.songList.length)
 			store.state.playing.songList.length > 0 && next()
 		},
 		component: resolve => require(["views/musicList/playing"], resolve)
@@ -52,6 +51,6 @@ let routes = [
 
 export default new Router({
 	routes,
-	mode: "history",  // 不用hash值
+	mode: "history",  // 不用hash
 	base: "/base"
 })

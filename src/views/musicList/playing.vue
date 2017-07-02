@@ -91,37 +91,31 @@
 
 	export default {
 		name: "playing",
-		data() {
+		data () {
 			return {
 
 			}
 		},
 		computed: {
 			...mapState(NameSpace, ["songMsg", "songState"]),
-			playingCurrent() {
-				return this.songState.currentLyricCurrentTime
+			playingCurrent () {
+				return this.songState.currentLyricCurrentTime;
 			},
-			playTiming() {
-				return this.songState.currentDuration
+			playTiming () {
+				return this.songState.currentDuration ? this.songState.currentDuration : 0;
 			},
-			ablumImgUrl() {
-				return this.songMsg.data.albummid ? (this.songMsg.songblum_prfix + this.songMsg.data.albummid + '.jpg?max_age=2592000') : 'https://y.gtimg.cn/mediastyle/mobile/app/share/img/music_logo.png?max_age=2592000&v=30cd379f7b9491439f2e8dcd6e1508b6'
+			ablumImgUrl () {
+				return this.songMsg.data.albummid ? (this.songMsg.songblum_prfix + this.songMsg.data.albummid + '.jpg?max_age=2592000') : 'https://y.gtimg.cn/mediastyle/mobile/app/share/img/music_logo.png?max_age=2592000&v=30cd379f7b9491439f2e8dcd6e1508b6';
 			},
 			// 歌词当前句
-			currentLyric() {
-				return this.songState.currentLyricArr[this.songState.currentLyricIndex]
+			currentLyric () {
+				return this.songState.currentLyricArr[this.songState.currentLyricIndex];
 			},
-			playingPrgress() {
-				return this.songState.playingProgress
+			playingPrgress () {
+				return this.songState.playingProgress;
 			},
-			playOrder() {
-				// return `../../assets/${this.songState.playingOrder}.png`
+			playOrder () {
 				return this.songState.playingOrder
-			}
-		},
-		watch: {
-			playOrder(val) {
-				console.log(val)
 			}
 		},
 		methods: {
@@ -129,22 +123,22 @@
 			...mapMutations("list", ["toggleShow"]),
 			...mapActions(NameSpace, ["playSong", "switchPlayOrder"]),
 
-			_bounceDown(el) {
+			_bounceDown (el) {
 				Velocity(el, {translateY: -800}, {duration: 0})
 				Velocity(el, {translateY: [5, [0.215, 0.610, 0.355, 1.000]]}, {duration: 400})
 				Velocity(el, {translateY: [0, [0.215, 0.610, 0.355, 1.000]]}, {duration: 100}).then(() => {el.removeAttribute('style')})
 			},
-			_bounceUp(el) {
+			_bounceUp (el) {
 				Velocity(el, {translateY: 800}, {duration: 0})
 				Velocity(el, {translateY: [-20, [0.215, 0.610, 0.355, 1.000]]}, {duration: 400})
 				Velocity(el, {translateY: [0, [0.215, 0.610, 0.355, 1.000]]}, {duration: 100})
 			} 
 		},
 		components: {
-			slider(resolve) {
+			slider (resolve) {
 				require(["components/slider.vue"], resolve)
 			},
-			lyrics(resolve) {
+			lyrics (resolve) {
 				require(["components/lyrics.vue"])
 			}
 		}
@@ -199,7 +193,7 @@
 				flex-direction: column;
 				justify-content: center;
 				.endTime {
-					padding-left: 6px;
+					padding-left: 12px;
 				}
 			}
 		}
