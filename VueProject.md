@@ -59,7 +59,7 @@
 
 * 当vuex中songid发生改变重新发送请求
 
-* 当点击相同歌曲或者不同歌曲是否触发watch来改变播放状态的判断：状态+“id”
+* 当点击相同歌曲或者不同歌曲是否触发watch来改变播放状态的判断：状态+"id"
 
 * 因为的播放play()一定要在$nextTick（更新DOM）之后！
 
@@ -98,4 +98,5 @@
 * 浏览器不能自动打开
 * 一切状态改变必须有mutations去做
 * vuex定义了modules，获取对应的actions方法用：this.$store.dispatch("modulesName/functionName", value)
-* @timeupdate事件在切换歌曲会失效？！
+* @timeupdate事件在切换歌曲会失效？！ 没有改变id的原因
+* keep-alive可能会导致缓存图片不刷新的情况，慎用！

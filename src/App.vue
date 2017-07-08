@@ -1,8 +1,9 @@
 <template>
     <div id="app">
-    	<keep-alive>
+        <!-- 慎用keep-alive -->
+    	<!-- <keep-alive> -->
         	<router-view></router-view>
-        </keep-alive>
+        <!-- </keep-alive> -->
         <footer-playing></footer-playing>
     </div>
 </template>

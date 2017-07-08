@@ -7,15 +7,11 @@
 		<div class="page-content">
 			<ul class="music-list">
 				<li style="margin:0">
-					<mt-cell title="Q Q 音 乐 巅 峰 榜"  class="music-cell-type1">
-					</mt-cell>
+					<mt-cell title="Q Q 音 乐 巅 峰 榜"  class="music-cell-type1"></mt-cell>
 				</li>
 				<template v-for="item in getListData">
 					<!-- 跳转至rankList页 携带id参数渲染不同数据 -->
-					<router-link
-						tag="li"
-						:to="{name: 'rankList', params: {id: item.id}}"
-						key="item.id">
+					<li @click="toRankList(item.id)" key="item.id">
 						<!-- mt-cell === a标签 内嵌3个子DIV 中间DIV存放内容 -->
 						<mt-cell  class="music-cell-type2">
 							<!-- 左侧封面 -->
@@ -38,7 +34,7 @@
               					</li>
             				</ul>
 						</mt-cell  class="music-cell-type2">
-					</router-link>	
+					</li>
 				</template>
 			</ul>
 		</div>
@@ -62,6 +58,17 @@
 		computed: {
 			getListData() {
 				return this.topList
+			}
+		},
+		methods: {
+			toRankList (id) {
+				// console.log(id);
+				this.$router.push({
+					name: "rankList",
+					params: {
+						id: id
+					}
+				})
 			}
 		}
 	}
