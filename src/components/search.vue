@@ -21,21 +21,16 @@
         </div>
         <div class="mint-search-list" v-show="visible">
             <div class="mint-search-list-warp">
-                <slot>
-                    <!-- <x-cell v-for="(item, index) in result" :key="index" :title="item" class="test">
-                    </x-cell> -->
-                </slot>
+                <slot></slot>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import XCell from 'mint-ui/packages/cell/index.js'
-// 引入指定UI组件
 export default {
     name: 'mt-search',
-    data() {
+    data () {
         return {
             visible: false,  
             // 子组件不建议修改父组件通过props传递过来的值
@@ -46,50 +41,47 @@ export default {
         // 输入框内容
         value: {
             type: String,
-            default (){
+            default () {
                 return ""
             }
         },
         autofocus: {
             type: Boolean,
-            default (){
+            default () {
                 return false
             }
         },
         cancelText: {
             type: String,
-            default (){
+            default () {
                 return "取消"
             }
         },
         placeholder: {
             type: String,
-            default (){
+            default () {
                 return "搜索"
             }
         },
         // 搜索结果
         result: {
             type: Array,
-            default (){
+            default () {
                 return []
             }
         }
     },
-    components: {
-        XCell
-    },
     watch: {
-        currentValue(val) {
-            // 向父级传递input的value值
+        currentValue (val) {
+            // 这里默认父级v-model即@input事件
             this.$emit('input', val);
         },
-        visible() {
-            // 向父级传递设置显示隐藏的布尔值
+        visible () {
+            // 这里默认更新父级:visible.sync的值
             this.$emit('update:visible', this.visible);
         }
     },
-    mounted() {
+    mounted () {
         // 加载完毕后是否获取焦点
         this.autofocus && this.$refs.input.focus();
     }
