@@ -1,16 +1,20 @@
 <template>
 	<div class="page">
+		<!-- 头部 -->
 		<mt-header fixed 
 				   title="音乐馆" 
 				   class="music-header scroll-header" 
 				   :style="searchVisible && {top: '-40px'}">
 		</mt-header>
+
+		<!-- 搜索 -->
 		<form @submit="searching">
 			<home-search
 				v-model="searchValue"
 				:visible.sync="searchVisible"
-				:style="searchVisible && {top: '-40px', height: '100%',height: '100vh'}">
-				<div class="hotkey-wrapper">
+				:style="searchVisible && {top: '-40px', height: '100vh'}">
+				<!-- slot部分 -->
+				<div class="hotkey-wrapper" v-if="searchState == 0">
 					<p>热门搜索</p>
 					<ul class="hotkey-list" ref="list">
 						<template v-for="(item, index) in hotkeys.slice(0,10)">
@@ -23,8 +27,23 @@
 					    </template>
 					</ul>
 				</div>
+
+				<div class="result-list" v-if="searchState == 2">
+					<mt-cell 
+					    v-for="(item, index) in searchResult"
+					    key="index" class="music-cell-type5" 
+					    @click.native="toPlay(item)">
+					    <i class="music-icon"></i>
+					    <div class="song-wrapper">
+					    	<p>{{ item.name }}</p>
+						    <p>{{ item.singer }}</p>
+					    </div>
+					</mt-cell>
+				</div>
 			</home-search>
 		</form>
+
+		<!-- 内容 -->
 		<div class="page-content" style="margin-top:86px;">
 			<swiper :options="swiperOption" ref="mySwiper">
 				<swiper-slide v-for="(item, index) in bannerDate" key="index">
@@ -66,18 +85,22 @@
 </template>
 
 <script>
-	import {apiHandler} from '@/api/index'
-	import {dealHotkey} from "@/public/index"
+	import { apiHandler } from '@/api/index'
+	import { dealHotkey } from "@/public/index"
 	import homeSearch from "components/search"
-	import {swiper, swiperSlide} from 'vue-awesome-swiper'
+	import { swiper, swiperSlide } from 'vue-awesome-swiper'
+	import { mapActions, mapMutations } from 'vuex'
+	const NameSpace = 'playing'
+
 	export default {
 		name: "home",
-		data (){
+
+		data () {
 			return {
 				indexMsg: {},
 				searchVisible: false, 
 				searchValue: "",
-				searchState: 0, 
+				searchState: 0,  // 0:未搜索 1:搜索中 2:搜索完毕
 				searchResult: [],
 				hotkeys: [],
 				musiclist: [
@@ -105,14 +128,17 @@
 		        }
 			};
 		},
+
 		components: {
 			homeSearch, swiper, swiperSlide
 		},
+
 		computed: {
 			bannerDate() {
 				return this.indexMsg && this.indexMsg.slider;
 			}
 		},
+
 		// 实例已经创建完成之后请求搜索数据
 		created (){
 			apiHandler("indexMsg", response=>{
@@ -123,17 +149,15 @@
 				this.hotkeys = dealHotkey(response.data);
 			});
 		},
+
 		methods: {
-			hotkeySearch(hotkey,index) {
-				let olist = this.$refs.list.children;
-				for(var i=0;i<olist.length;i++){
-					olist[i].className = "";
-				}
-				olist[index].className = "speical";
+			...mapMutations (NameSpace, ["pause", "songList", "songIndex", "switchPlayOrder"]),
+			...mapActions (NameSpace, ["playSong"]),
+			hotkeySearch (hotkey) {
 				this.searchValue = hotkey;
 				this.searching();
 			},
-			searching (e){
+			searching (e) {
 				// 阻止默认事件
 				e && e.preventDefault();
 				this.searchState = 1;
@@ -143,11 +167,37 @@
 		        		key: this.searchValue
 		        	}
 				}, response => {
-					console.log(response);
-					// API出错！
 					this.searchState = 2;
 					this.searchResult = response.data && response.data.song.itemlist || [];
 				})
+			},
+			// 用于搜索页面歌曲播放，由于QQ音乐搜索API跨域限制这里无法获取到封面信息
+			toPlay (song) {
+				let data = {
+					songid: song.id,
+					songname: song.name,
+					singer: song.singer
+				}
+				// 控制开关
+				this.pause("play"+data.songid)
+				// 歌曲信息
+				this.playSong(data)
+			}
+		},
+
+		watch: {
+			searchVisible (visible) {
+				if (!visible) {
+					this.searchState = 0;
+					this.searchResult = [];
+				}
+			},
+			searchState(state) {
+				if (state == 1) {
+					this.$indicator.open(`正在搜索${this.searchValue}`);
+				} else {
+					this.$indicator.close();
+				}
 			}
 		}
 	}
