@@ -7,7 +7,7 @@ const NameSpace = 'playing';
 
 // 全局函数
 export default {
-	playMusic(songlist, index, songid) {
+	playMusic (songlist, index, songid) {
 		let song = songlist[index],
 			stack = stackSonglist(songlist, index),
 			songIndex = getCurrentIndex(stack, songid);
@@ -15,7 +15,7 @@ export default {
 		store.commit(NameSpace + '/stackSonglist', stack);
 		store.dispatch(NameSpace + '/playSong', songIndex);
 	},
-	goSpecial(url) {
+	goSpecial (url) {
 		this.$router.push({
 			name: 'special',
 			query: {

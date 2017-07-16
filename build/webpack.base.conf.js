@@ -2,18 +2,21 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var nodeModulesPath = path.resolve(__dirname, 'node_modules')
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
+    // 配置webpack编译入口
     entry: {
         app: './src/main.js'
     },
+    // 配置webpack输出路径和命名规则
     output: {
         path: config.build.assetsRoot,
-        filename: '[name].js',
+        filename: '[name].[hash:7].js', // 防止读取缓存
         publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath
     },
     resolve: {
@@ -32,9 +35,10 @@ module.exports = {
             loader: 'vue-loader',
             options: vueLoaderConfig
         }, {
-            test: /\.js$/,
+            test: /\.(js|jsx)$/,  // 可使用正则表达式
             loader: 'babel-loader',
-            include: [resolve('src'), resolve('test')]
+            include: [resolve('src'), resolve('test')],
+            exclude: [nodeModulesPath]  // 排除不处理的目录
         }, {
             test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
             loader: 'url-loader',

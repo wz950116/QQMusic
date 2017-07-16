@@ -43,7 +43,7 @@ const state = {
 }
 
 const mutations = {
-	[SONG_MSG] (state, msgObj){
+	[SONG_MSG] (state, msgObj) {
 		state.songMsg.data = msgObj
 	},
 	// 歌曲ID

@@ -8,16 +8,16 @@ const state = {
 }
 
 const mutations = {
-	[TOGGLE_SHOW](state) {
+	[TOGGLE_SHOW] (state) {
 		state.show = !state.show
 	},
-	[MODIFY_CLASS](state, style) {
+	[MODIFY_CLASS] (state, style) {
 		state.class = style
 	}
 }
 
 const actions = {
-	modifyClass({commit}, style){
+	modifyClass ({commit}, style){
 		commit(MODIFY_CLASS, style)
 	}
 }

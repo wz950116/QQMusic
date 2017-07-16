@@ -21,7 +21,6 @@
 * <Img :src="require(`../../assets/${item.icon}`)" />
 
 * // 移除script标签
-
       window[callbackName] = function(data) {
       	window[callbackName] = undefined; //必须手动赋值undefined
           document.body.removeChild(script);
@@ -90,13 +89,13 @@
   ```
 
 * footer部分 滑动切换歌曲 待完善
-* 样式的一些小BUG
+* 样式的一些小BUG（解决）
 * slot保留原有父组件部分，添加name值保留制定原有父组件部分
 * 可以通过mapState获取状态，也可以定义getter获取
 * 如何让歌曲自动切换到下一首？index++  监听？
 * 修改element-ui某些样式不能给style标签加scoped
-* 浏览器不能自动打开
+* 浏览器不能自动打开  （解决）
 * 一切状态改变必须有mutations去做
 * vuex定义了modules，获取对应的actions方法用：this.$store.dispatch("modulesName/functionName", value)
-* @timeupdate事件在切换歌曲会失效？！ 没有改变id的原因
+* @timeupdate事件在切换歌曲会失效？！ 没有改变id的原因（解决）
 * keep-alive可能会导致缓存图片不刷新的情况，慎用！

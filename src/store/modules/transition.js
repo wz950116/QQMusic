@@ -5,12 +5,12 @@ const state = {
 	action: []
 }
 const mutations = {
-	[SET_TRANSITION](state, transition) {
+	[SET_TRANSITION] (state, transition) {
 		state.transitionName = transition;
 	}
 }
 const actions = {
-	setTransition({commit}, transition) {
+	setTransition ({commit}, transition) {
 		console.log(transition);
 		commit(SET_TRANSITION, transition)
 	}
