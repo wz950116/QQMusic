@@ -4,7 +4,7 @@ const namespaced = true
 
 const state = {
     show: false,
-	class: ''
+	  class: ''
 }
 
 const mutations = {
